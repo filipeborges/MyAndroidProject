@@ -9,6 +9,7 @@ import java.util.Iterator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.content.Context;
+import android.content.res.Resources;
 
 public class BitmapLoader {
 	
@@ -18,17 +19,33 @@ public class BitmapLoader {
 		this.context = context;
 	}
 	
-	public Bitmap loadBitmapUsingPercentScreen(String fileName, int screenPercent, int screenWidth, int screenHeight) {
+	public Bitmap loadResourceBitmap(Resources res, int resourceId, int reqWidth, int reqHeight) {
+		if(reqWidth == 0 || reqHeight == 0 || res == null) {
+			return null;
+		}
+		else {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeResource(res, resourceId, options);
 		
-		return null;
+			if(reqWidth > options.outWidth || reqHeight > options.outHeight) {
+				return null;
+			}
+			else {
+				options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+				options.inJustDecodeBounds = false;
+		
+				return BitmapFactory.decodeResource(res, resourceId, options);
+			}
+		}
 	}
 	
-	public Bitmap loadBitmap(String fileName, int reqWidth, int reqHeight) {
+	public Bitmap loadAssetBitmap(String fileName, int reqWidth, int reqHeight) {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		Bitmap bitmap = null;
 		
 		options.inJustDecodeBounds = true;
-		byte[] bufferData = createByteArrayFromFile(fileName);
+		byte[] bufferData = createByteArrayFromAsset(fileName);
 		
 		if(bufferData != null) {
 			bitmap = BitmapFactory.decodeByteArray(bufferData, 0, bufferData.length, options);
@@ -54,7 +71,7 @@ public class BitmapLoader {
 		return inSampleSize;
 	}
 	
-	private byte[] createByteArrayFromFile(String fileName) {
+	private byte[] createByteArrayFromAsset(String fileName) {
 		int totalOfBytes = 0;
 		byte[] buffer = null;
 		

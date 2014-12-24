@@ -2,6 +2,8 @@ package com.mycustomlib.loadbitmaptest;
 
 import java.lang.ref.WeakReference;
 
+import com.example.loadbitmaptest.R;
+
 import android.os.AsyncTask;
 import android.widget.ImageView;
 import android.graphics.Bitmap;
@@ -22,7 +24,7 @@ public class LoaderThread extends AsyncTask<Integer, Void, Bitmap>{
 	@Override
 	protected Bitmap doInBackground(Integer... params) {
 		BitmapLoader bitmapLoader = new BitmapLoader(context);
-		Bitmap bitmap = bitmapLoader.loadBitmap(imageFileName, params[0], params[1]);
+		Bitmap bitmap = bitmapLoader.loadAssetBitmap(imageFileName, params[0], params[1]);
 		
 		if(bitmap != null) {
 			return bitmap;
