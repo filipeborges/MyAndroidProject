@@ -19,6 +19,7 @@ public class BitmapLoader {
 		this.context = context;
 	}
 	
+	/*Target resolution should be equal or less the resolution from the image to open.*/
 	public Bitmap loadResourceBitmap(Resources res, int resourceId, int reqWidth, int reqHeight) {
 		if(reqWidth == 0 || reqHeight == 0 || res == null) {
 			return null;
@@ -40,22 +41,32 @@ public class BitmapLoader {
 		}
 	}
 	
+	/*Target resolution should be equal or less the resolution from the image to open.*/
 	public Bitmap loadAssetBitmap(String fileName, int reqWidth, int reqHeight) {
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		Bitmap bitmap = null;
-		
-		options.inJustDecodeBounds = true;
-		byte[] bufferData = createByteArrayFromAsset(fileName);
-		
-		if(bufferData != null) {
-			bitmap = BitmapFactory.decodeByteArray(bufferData, 0, bufferData.length, options);
-			options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-			options.inJustDecodeBounds = false;
-			
-			return BitmapFactory.decodeByteArray(bufferData, 0, bufferData.length, options);
+		if(reqWidth == 0 || reqHeight == 0) {
+			return null;
 		}
 		else {
-			return null;
+			BitmapFactory.Options options = new BitmapFactory.Options();
+		
+			options.inJustDecodeBounds = true;
+			byte[] bufferData = createByteArrayFromAsset(fileName);
+		
+			if(bufferData != null) {
+				BitmapFactory.decodeByteArray(bufferData, 0, bufferData.length, options);
+			
+				if(reqWidth > options.outWidth || reqHeight > options.outHeight) {
+					return null;
+				}
+				else {
+					options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+					options.inJustDecodeBounds = false;
+					return BitmapFactory.decodeByteArray(bufferData, 0, bufferData.length, options);
+				}
+			}
+			else {
+				return null;
+			}
 		}
 	}
 	
