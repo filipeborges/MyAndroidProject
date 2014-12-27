@@ -2,9 +2,6 @@ package com.mycustomlib.loadbitmaptest;
 
 import java.io.InputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,11 +10,7 @@ import android.content.res.Resources;
 
 public class BitmapLoader {
 	
-	private Context context;
-	
-	public BitmapLoader(Context context) {
-		this.context = context;
-	}
+	public BitmapLoader() {}
 	
 	/*Target resolution should be equal or less the resolution from the image to open.*/
 	public Bitmap loadResourceBitmap(Resources res, int resourceId, int reqWidth, int reqHeight) {
@@ -42,7 +35,7 @@ public class BitmapLoader {
 	}
 	
 	/*Target resolution should be equal or less the resolution from the image to open.*/
-	public Bitmap loadAssetBitmap(String fileName, int reqWidth, int reqHeight) {
+	public Bitmap loadAssetBitmap(Context context, String fileName, int reqWidth, int reqHeight) {
 		if(reqWidth == 0 || reqHeight == 0) {
 			return null;
 		}
@@ -50,7 +43,8 @@ public class BitmapLoader {
 			BitmapFactory.Options options = new BitmapFactory.Options();
 		
 			options.inJustDecodeBounds = true;
-			byte[] bufferData = createByteArrayFromAsset(fileName);
+			
+			byte[] bufferData = createByteArrayFromAsset(context, fileName);
 		
 			if(bufferData != null) {
 				BitmapFactory.decodeByteArray(bufferData, 0, bufferData.length, options);
@@ -82,7 +76,7 @@ public class BitmapLoader {
 		return inSampleSize;
 	}
 	
-	private byte[] createByteArrayFromAsset(String fileName) {
+	private byte[] createByteArrayFromAsset(Context context, String fileName) {
 		int totalOfBytes = 0;
 		byte[] buffer = null;
 		
