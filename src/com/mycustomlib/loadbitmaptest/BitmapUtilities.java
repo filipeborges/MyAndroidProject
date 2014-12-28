@@ -5,12 +5,37 @@ import java.io.IOException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.content.Context;
 import android.content.res.Resources;
 
-public class BitmapLoader {
+public class BitmapUtilities {
 	
-	public BitmapLoader() {}
+	public BitmapUtilities() {}
+	
+	public Bitmap setTransparencyOnJpgBitmap(Bitmap bitmap, int transparencyColor) {
+		if(bitmap == null) {
+			return null;
+		}
+		else {
+			final int HEIGHT = bitmap.getHeight();
+			final int WIDTH = bitmap.getWidth();
+		
+			Bitmap bitmapWithAlpha = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888);
+		
+			for(int y = 0; y < HEIGHT; y++) {
+				for(int x = 0; x < WIDTH; x++) {
+					if(bitmap.getPixel(x, y) == transparencyColor) {
+						bitmapWithAlpha.setPixel(x, y, Color.TRANSPARENT);
+					}
+					else {
+						bitmapWithAlpha.setPixel(x, y, bitmap.getPixel(x, y));
+					}
+				}
+			}
+			return bitmapWithAlpha;
+		}
+	}
 	
 	/*Target resolution should be equal or less the resolution from the image to open.*/
 	public Bitmap loadResourceBitmap(Resources res, int resourceId, int reqWidth, int reqHeight) {
