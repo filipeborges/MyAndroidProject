@@ -18,9 +18,16 @@ public class BitmapToImageViewThread extends AsyncTask<Void, Void, Bitmap>{
 	private int reqHeight;
 	private boolean isFromResource = false;
 	private boolean isFromAsset = false;
+	private boolean isTransparent = false;
+	private int colorPattern = -1;
 	
 	public BitmapToImageViewThread(ImageView imageView) {
 		this.uiImageView = new WeakReference<ImageView>(imageView);
+	}
+	
+	public void setTransparencyOnBitmapBasedOnColor(boolean isTransparent, int colorPattern) {
+		this.isTransparent = isTransparent;
+		this.colorPattern = colorPattern;
 	}
 	
 	public void setupBitmapFromAsset(Context context, String fileName, int reqWidth, int reqHeight) {
@@ -51,7 +58,7 @@ public class BitmapToImageViewThread extends AsyncTask<Void, Void, Bitmap>{
 	
 	@Override
 	protected Bitmap doInBackground(Void... empty) {
-		BitmapLoader bitmapLoader = new BitmapLoader();
+		BitmapUtilities bitmapLoader = new BitmapUtilities();
 		Bitmap bitmap = null;
 		
 		if(isFromAsset) {
@@ -62,7 +69,12 @@ public class BitmapToImageViewThread extends AsyncTask<Void, Void, Bitmap>{
 		}
 			
 		if(bitmap != null) {
-			return bitmap;
+			if(isTransparent) {
+				return bitmapLoader.setTransparencyOnBitmap(bitmap, colorPattern);
+			}
+			else {
+				return bitmap;
+			}
 		}
 		else {
 			return null;

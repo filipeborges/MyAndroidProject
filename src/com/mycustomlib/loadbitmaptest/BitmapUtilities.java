@@ -13,7 +13,7 @@ public class BitmapUtilities {
 	
 	public BitmapUtilities() {}
 	
-	public Bitmap setTransparencyOnJpgBitmap(Bitmap bitmap, int transparencyColor) {
+	public Bitmap setTransparencyOnBitmap(Bitmap bitmap, int colorPattern) {
 		if(bitmap == null) {
 			return null;
 		}
@@ -25,7 +25,7 @@ public class BitmapUtilities {
 		
 			for(int y = 0; y < HEIGHT; y++) {
 				for(int x = 0; x < WIDTH; x++) {
-					if(bitmap.getPixel(x, y) == transparencyColor) {
+					if(bitmap.getPixel(x, y) == colorPattern) {
 						bitmapWithAlpha.setPixel(x, y, Color.TRANSPARENT);
 					}
 					else {
