@@ -1,4 +1,4 @@
-package com.mycustomlib.loadbitmaptest;
+package com.mycustomlibs;
 
 import java.lang.ref.WeakReference;
 
