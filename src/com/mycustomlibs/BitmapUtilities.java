@@ -13,6 +13,7 @@ public class BitmapUtilities {
 	
 	public BitmapUtilities() {}
 	
+	/*Color pattern will be Transparent.*/
 	public Bitmap setTransparencyOnBitmap(Bitmap bitmap, int colorPattern) {
 		if(bitmap == null) {
 			return null;

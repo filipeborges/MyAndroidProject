@@ -6,6 +6,7 @@ import android.view.WindowManager;
 
 public class ScreenUtilities {
 
+	/*Return: [0] - DPI, [1] - WIDTH, [2] - HEIGHT*/
 	public static int[] getScreenProperties(Context context) {
 		if(context == null) {
 			return null;
